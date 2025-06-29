@@ -18,11 +18,15 @@ async function handleToCreateShortUrl(req, res) {
         visitHistory: []
     })
 
-    return res.status(200).json({
-        message: "Short-Url is created successfully...",
-        id: shortId,
-        success: true
-    })
+    // we are using ejs so we need to use server side rendering
+
+    return res.render("Home", { id: shortId });
+
+    // return res.status(200).json({
+    //     message: "Short-Url is created successfully...",
+    //     id: shortId,
+    //     success: true
+    // })
 
 }
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2> Hello Server</h2>
+    <% if (locals.id) { %>
+        <p>Generated URL : http://localhost:8002/url/<%= id %>
+        </p>
+        <% } %>
+            <div>
+                <form action="/url" method="post">
+                    <label for="">Enter your Url: </label>
+                    <input type="text" name="url" placeholder="url:https://www.example.com">
+                    <button type="submit">Generate </button>
+                </form>
+            </div>
+
+            <div>
+                <% if (locals.urls) { %>
+                    <table border="2">
+                        <thead>
+                            <tr>
+                                <th>S.no</th>
+                                <th>Short-Url</th>
+                                <th>Orignal Url</th>
+                                <th>Visit Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% urls.forEach((data,index)=> { %>
+
+                                <tr>
+                                    <td>
+                                        <%=index+1%>
+                                    </td>
+                                    <td>
+                                        <%=data?.shortId%>
+                                    </td>
+                                    <td>
+                                        <%=data?.orignalURL%>
+                                    </td>
+                                    <td>
+                                        <%=data?.visitHistory.length%>
+                                    </td>
+                                </tr>
+
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } %>
+            </div>
+
+</body>
+
+</html>
