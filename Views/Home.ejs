@@ -14,14 +14,42 @@
         </p>
         <% } %>
             <div>
-                <form action="/url" method="post">
-                    <label for="">Enter your Url: </label>
-                    <input type="text" name="url" placeholder="url:https://www.example.com">
-                    <button type="submit">Generate </button>
+                <form action="/url" method="post"
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+
+                    <!-- Left Side: Label + Input -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label>Enter your Url: </label>
+                        <input type="text" name="url" placeholder="url: https://www.example.com">
+                        <button type="submit">Generate</button>
+
+                    </div>
+
+                    <!-- Right Side: Generate + Signup + Login -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+
+                        <a href="/signup"
+                            style="padding: 8px 16px; background-color: rgb(76, 76, 147); color: white; text-decoration: none; border-radius: 4px;">
+                            Signup
+                        </a>
+
+                        <a href="/login"
+                            style="padding: 8px 16px; background-color: rgb(198, 94, 66); color: white; text-decoration: none; border-radius: 4px;">
+                            Login
+                        </a>
+                    </div>
                 </form>
+
+
+
+
+
+
             </div>
 
-            <div>
+
+
+            <div style="margin-top: 8px;">
                 <% if (locals.urls) { %>
                     <table border="2">
                         <thead>

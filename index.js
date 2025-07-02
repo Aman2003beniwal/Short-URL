@@ -3,8 +3,7 @@ const urlRouter = require("./Routers/url");
 const staticRouter = require("./Routers/staticRouter");
 const connectionDB = require("./connection");
 const path = require("path");
-const Url = require("./models/urlModels");
-
+const UserData = require("./Routers/userData")
 const app = express();
 const PORT = 8002;
 
@@ -16,6 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use("/url", urlRouter);
 app.use("/", staticRouter);
+
+app.use("/userData", UserData);
 
 // we are using a ejs for server side rendering
 app.set("view engine", "ejs");
