@@ -15,7 +15,8 @@ async function handleToCreateShortUrl(req, res) {
     await urlSchema.create({
         shortId: shortId,
         orignalURL: body.url,
-        visitHistory: []
+        visitHistory: [],
+        createdBy: req.user._id
     })
 
     // we are using ejs so we need to use server side rendering

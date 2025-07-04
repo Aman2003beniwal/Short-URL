@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { handleAndRedirectUrl, handleToCreateShortUrl, getAnalytics } = require("../Controller/handleToCreateShortUrlController");
 
-const { model } = require("mongoose");
 
 router.post("/", handleToCreateShortUrl);
 

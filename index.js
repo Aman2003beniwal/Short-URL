@@ -5,6 +5,8 @@ const connectionDB = require("./connection");
 const path = require("path");
 const UserData = require("./Routers/userData")
 const app = express();
+const cookieParser = require("cookie-parser");
+const { restrictToLoggedUserOnly, checkAuth } = require("./middleware/authMiddleware")
 const PORT = 8002;
 
 connectionDB("mongodb://127.0.0.1:27017/url-short")
@@ -13,10 +15,13 @@ connectionDB("mongodb://127.0.0.1:27017/url-short")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-app.use("/url", urlRouter);
-app.use("/", staticRouter);
+app.use(cookieParser());
 
+
+app.use("/url", restrictToLoggedUserOnly, urlRouter);
 app.use("/userData", UserData);
+app.use("/", checkAuth, staticRouter);
+
 
 // we are using a ejs for server side rendering
 app.set("view engine", "ejs");
