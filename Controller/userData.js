@@ -52,30 +52,58 @@ async function login(req, res) {
     const findData = await Users.findOne({ email, password })
     // console.log("findData : ", findData);
 
-    if (findData) {
 
-        const sessionId = uuidv4();
-        setUser(sessionId, findData);
-        res.cookie("uuid", sessionId, {
-            httpOnly: true,
-            secure: false, // set true if you’re on HTTPS
-            maxAge: 24 * 60 * 60 * 1000 // optional: 1 day
-        });
-        return res.status(200).json({
-            status: true,
-            message: "Login successfully",
-            sessionId,
-            data: {
-                "email": findData.email,
-                "password": findData.password
-            }
-        })
-    } else {
-        return res.status(404).json({
+    //// using the statefull authentation by using the uuid
+    // if (findData) {
+    //     const sessionId = uuidv4();
+    //     setUser(sessionId, findData);
+    //     res.cookie("uuid", sessionId, {
+    //         httpOnly: true,
+    //         secure: false, // set true if you’re on HTTPS
+    //         maxAge: 24 * 60 * 60 * 1000 // optional: 1 day
+    //     });
+    //     return res.status(200).json({
+    //         status: true,
+    //         message: "Login successfully",
+    //         sessionId,
+    //         data: {
+    //             "email": findData.email,
+    //             "password": findData.password
+    //         }
+    //     })
+    // } else {
+    //     return res.status(404).json({
+    //         status: false,
+    //         message: "User creditial is wrong,Try again with correct information"
+    //     })
+    // }
+
+    //// using stateless authentation by using the jwt token
+
+    if (!findData) {
+        return res.status(400).json({
             status: false,
-            message: "User creditial is wrong,Try again with correct information"
+            message: "User credentials are wrong, try again with correct information"
         })
     }
+
+    const token = setUser(findData)
+    res.cookie("setToken", token, {
+        httpOnly: true,
+        secure: false, // true if HTTPS
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+    })
+
+    res.status(200).json({
+        status: true,
+        message: "Login successful",
+        user: {
+            email: findData.email,
+            _id: findData._id,
+            token
+        }
+    })
+
 }
 
 module.exports = { signup, login, fetchAllData }
@@ -131,7 +159,7 @@ async function login(req, res) {
 
     //// here we are using a jwt token
     const token = setUser(user);
-    res.cookie("uuid",token)
+    res.cookie("setToken",token)
 
     return res.redirect("/userData");
 }
