@@ -156,12 +156,20 @@ async function login(req, res) {
     // const sessionId = uuidv4();
     //setUser(sessionId, user); // setting the user in auth.js with sessionId(uuid) and user that is login (email+password)
     //res.cookie("uuid", sessionId); // it is  sets a cookie in the response that will be sent back to the client (browser) 
+    // return res.redirect("/userData");
+
+
 
     //// here we are using a jwt token
     const token = setUser(user);
-    res.cookie("setToken",token)
+    res.cookie("setToken", token)
 
-    return res.redirect("/userData");
+    if (user.role === "Admin") {
+        return res.redirect("/admin/url");
+    } else {
+        return res.redirect("/userData");
+    }
+    // return res.json({ token })
 }
 
 module.exports = { fetchAllData, signup, login }

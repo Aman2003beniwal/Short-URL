@@ -37,6 +37,8 @@ const checkAuth = (req, res, next) => {
 module.exports = { restrictToLoggedUserOnly, checkAuth }
 */
 
+const { getUser } = require("../services/auth");
+
 
 
 /*
@@ -64,6 +66,7 @@ module.exports = { restrictToLoggedUserOnly, checkAuth }
 */
 
 
+/*
 // using stateless authentation 
 const { getUser } = require("../services/auth");
 
@@ -87,3 +90,35 @@ const checkAuth = (req, res, next) => {
 
 
 module.exports = { restrictToLoggedUserOnly, checkAuth };
+*/
+
+
+//we are using authorization 1) index.js ,changes in static route and also changes in controller
+// handle authorization and authentication both 
+
+function checkForAuthentication(req, res, next) { // this is for authentication
+    const tokenCookies = req.cookies?.setToken;
+    req.user = null;
+    if (!tokenCookies) {
+        return next()
+    }
+
+    const user = getUser(tokenCookies);
+    if (!user) return next();
+
+    req.user = user;
+    return next();
+}
+
+
+function restrictTo(roles = []) {   // this is for authorization
+    return (function (req, res, next) {   // this is a closoure 
+        if (!req.user) return res.redirect("/login")
+
+        if (!roles.includes(req.user.role)) return res.send("Unauthorized user")
+
+        return next();
+    })
+
+}
+module.exports = { checkForAuthentication, restrictTo }
